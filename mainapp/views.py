@@ -4,7 +4,15 @@ from django.shortcuts import render
 
 
 def main(request):
-    return render(request, 'mainapp/index.html')
+    context = {
+        'title': "тестовый заголовок",
+        'products': [
+            {'name': 'Товар1', 'price': "1000руб."},
+            {'name': 'Товар2', 'price': "2000руб."},
+            {'name': 'Товар3', 'price': "3000руб."},
+        ]
+    }
+    return render(request, 'mainapp/index.html', context)
 
 
 def products(request):
