@@ -17,8 +17,13 @@ def main(request):
     return render(request, 'mainapp/index.html')
 
 def products(request, id=None):
-    context = {
-        'products': Product.objects.all(),
-        'categories': ProductCategory.objects.all(),
-    }
+    if id:
+        context ={
+            'product': Product.objects.get(id=id)
+        }
+    else:
+        context = {
+            'products': Product.objects.all(),
+            'categories': ProductCategory.objects.all(),
+         }
     return render(request, 'mainapp/products.html', context)
