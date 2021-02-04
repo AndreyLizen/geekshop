@@ -3,6 +3,7 @@ from django.contrib import auth
 from django.urls import reverse
 
 from authapp.forms import UserLoginForm, UserRegisterForm
+from authapp.models import User
 
 def login(request):
     if request.method == 'POST':
