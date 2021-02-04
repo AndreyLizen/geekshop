@@ -12,7 +12,7 @@ class ProductCategory(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=256)
-    image = models.ImageField(upload_to='products_images', default='products_images/1234.jpg')
+    image = models.ImageField(upload_to='products_images', default='static/default_img/1234.jpg')
     description = models.TextField(blank=True)
     short_description = models.CharField(max_length=64, blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
