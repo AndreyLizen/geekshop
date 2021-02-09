@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'authapp',
-    'basket'
+    'basket',
+    'adminapp'
 ]
 
 MIDDLEWARE = [
