@@ -2,6 +2,7 @@ from django import forms
 
 from authapp.forms import UserRegisterForm, UserProfileForm
 from authapp.models import User
+from mainapp.models import ProductCategory
 
 
 class UserAdminRegisterForm(UserRegisterForm):
@@ -24,6 +25,22 @@ class UserAdminProfileForm(UserProfileForm):
         self.fields['email'].widget.attrs['readonly'] = False
 
 
-class ProductCategoryForm(forms.Form):
-    name = forms.CharField(label='name')
-    description = forms.CharField(label='description')
+class ProductCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class ProductCategoryEditForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''
