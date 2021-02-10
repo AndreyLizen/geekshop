@@ -36,6 +36,16 @@ def admin_users_create(request):
     context = {'form': form}
     return render(request, 'adminapp/admin-users-create.html', context)
 
+@user_passes_test(lambda u: u.is_superuser)
+def admin_categories_create(request):
+    if request.method == 'POST':
+        form = ProductCategory(data=request.POST, files=request.FILES)
+        form.save()
+        return HttpResponseRedirect(reverse('admins:admin_categories_read'))
+    else:
+        form = ProductCategory()
+    context = {'form': form}
+    return render(request, 'adminapp/admin-categories-create.html', context)
 
 def admin_users_update(request, id):
     user = User.objects.get(id=id)
