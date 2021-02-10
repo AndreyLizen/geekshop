@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 from mainapp.models import ProductCategory
 from authapp.models import User
-from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm
+from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryForm
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def index(request):
@@ -39,11 +39,14 @@ def admin_users_create(request):
 @user_passes_test(lambda u: u.is_superuser)
 def admin_categories_create(request):
     if request.method == 'POST':
-        form = ProductCategory(data=request.POST, files=request.FILES)
-        form.save()
-        return HttpResponseRedirect(reverse('admins:admin_categories_read'))
+        form = ProductCategoryForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:admin_categories_read'))
+        else:
+            print(form.errors)
     else:
-        form = ProductCategory()
+        form = ProductCategoryForm()
     context = {'form': form}
     return render(request, 'adminapp/admin-categories-create.html', context)
 
