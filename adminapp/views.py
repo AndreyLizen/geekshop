@@ -71,7 +71,7 @@ def admin_categories_update(request, id):
             form.save()
             return HttpResponseRedirect(reverse('admins:admin_categories_read'))
     else:
-        form = UserAdminProfileForm(instance=category)
+        form = ProductCategoryEditForm(instance=category)
     context = {'form': form, 'current_category': category}
     return render(request, 'adminapp/admin-categories-update-delete.html', context)
 
