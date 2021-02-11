@@ -34,10 +34,7 @@ class ProductCategoryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
 
-class ProductCategoryEditForm(forms.ModelForm):
-    class Meta:
-        model = ProductCategory
-        fields = '__all__'
+class ProductCategoryEditForm(ProductCategoryForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
