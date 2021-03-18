@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 from basket.models import Basket
 from authapp.models import User
+from .utils import send_verify_mail
 
 def verify(request, user_id, hash):
     user = get_object_or_404(User, pk=user_id)
@@ -19,6 +20,7 @@ def verify(request, user_id, hash):
         auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         messages.success(request, 'Вы авторизованы, аккаунт активен')
     return render(request, 'authapp/verification.html')
+
 
 def login(request):
     if request.method == 'POST':
@@ -40,8 +42,9 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(data=request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Регистрация прошла успешно!')
+            user = form.save()
+            send_verify_mail(user)
+            messages.success(request, 'Проверьте почту и подтвердите регистрацию.')
             return HttpResponseRedirect(reverse('auth:login'))
     else:
         form = UserRegisterForm()
