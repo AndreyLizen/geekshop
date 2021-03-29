@@ -14,7 +14,7 @@ from ordersapp.forms import OrderItemForm
 
 class OrderList(ListView):
     model = Order
-    # template_name = 'order_list.html'
+    # template_name = 'order_list.html' - значение по умолчанию
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
@@ -109,7 +109,7 @@ def order_forming_complete(request, pk):
     return HttpResponseRedirect(reverse('ordersapp:orders_list'))
 
 
-##########
+##########Пример сравнения
 
 class JustView(View):
 
