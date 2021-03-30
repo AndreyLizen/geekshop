@@ -42,6 +42,10 @@
                        Заказы
                    </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link">В Корзине {{ basket_count }}
+                   </a>
+                </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'auth:profile' %}">{{ user.username }}
