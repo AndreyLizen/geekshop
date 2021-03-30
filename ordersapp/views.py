@@ -1,15 +1,18 @@
 from django.shortcuts import get_object_or_404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.forms import inlineformset_factory
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 from django.views.generic.detail import DetailView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from basket.models import Basket
 from ordersapp.models import Order, OrderItem
 from ordersapp.forms import OrderItemForm
+from mainapp.models import Product
 
 
 class OrderList(ListView):
@@ -18,6 +21,10 @@ class OrderList(ListView):
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
+
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super(ListView, self).dispatch(*args, **kwargs)
 
 
 class OrderItemsCreate(CreateView):
@@ -75,7 +82,11 @@ class OrderItemsUpdate(UpdateView):
         if self.request.POST:
             data['orderitems'] = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            data['orderitems'] = OrderFormSet(instance=self.object)
+            formset = OrderFormSet(instance=self.object)
+            for form in formset:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
+            data['orderitems'] = formset
         return data
 
     def form_valid(self, form):
@@ -119,7 +130,16 @@ def order_forming_complete(request, pk):
     return HttpResponseRedirect(reverse('ordersapp:orders_list'))
 
 
-##########Пример сравнения
+def get_product_price(request, pk):
+    if request.is_ajax():
+        product = Product.objects.filter(pk=int(pk)).first()
+        if product:
+            return JsonResponse({'price': product.price})
+        else:
+            return JsonResponse({'price': 0})
+
+
+########## Пример сравнения
 
 class JustView(View):
 
