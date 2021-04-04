@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load sample_tag %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,9 +43,13 @@
                        Заказы
                    </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link">В Корзине {{ basket_count }}
+                   </a>
+                </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'auth:profile' %}">{{ user.username }}
+                        <a class="nav-link" href="{% url 'auth:profile' %}">{{ user.username|cut_words:6 }}
                             <i class="fas fa-user-circle"></i>
                         </a>
                     </li>
@@ -74,6 +79,7 @@
 <!-- Bootstrap core JavaScript -->
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
 
 <!-- FontAwesome script -->
 <script src="{% static 'vendor/fontawesome/fontawesome-icons.js'%}" crossorigin="anonymous" ></script>
